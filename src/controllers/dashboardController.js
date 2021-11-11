@@ -11,7 +11,15 @@ exports.getCumulativeCompliance = (req, res, next) => {
     select
            count(1) as _count,
            count(1) * 100.0 / sum(count(1)) over() as _percentage,
-           getConformity(ai.audit_conformity) as _labels
+           CASE
+           WHEN ai.audit_conformity = 1 THEN 'A VERIFICAR'
+           WHEN ai.audit_conformity = 2 THEN 'NÃO SE APLICA'
+           WHEN ai.audit_conformity = 3 THEN 'SIM'
+           WHEN ai.audit_conformity = 4 THEN 'NÃO'
+           WHEN ai.audit_conformity = 5 THEN 'FUTURO'
+           WHEN ai.audit_conformity = 6 THEN 'PARCIAL'
+           ELSE 'INVÁLIDO'
+       END as _labels
     from audits a
     inner join audit_items ai on a.audit_id = ai.audits_audit_id
     group by ai.audit_conformity
@@ -35,7 +43,15 @@ exports.getPraticalOrderCompliance = (req, res, next) => {
     select
            count(1) as _count,
            count(1) * 100.0 / sum(count(1)) over() as _percentage,
-           getConformity(ai.audit_conformity) as _labels
+           CASE
+           WHEN ai.audit_conformity = 1 THEN 'A VERIFICAR'
+           WHEN ai.audit_conformity = 2 THEN 'NÃO SE APLICA'
+           WHEN ai.audit_conformity = 3 THEN 'SIM'
+           WHEN ai.audit_conformity = 4 THEN 'NÃO'
+           WHEN ai.audit_conformity = 5 THEN 'FUTURO'
+           WHEN ai.audit_conformity = 6 THEN 'PARCIAL'
+           ELSE 'INVÁLIDO'
+       END as _labels
     from audits a
     inner join audit_items ai on a.audit_id = ai.audits_audit_id
     inner join customers_units cu on a.unit_id = cu.customer_unit_id
@@ -171,16 +187,23 @@ exports.getResponsibleByAspect = (req, res, next) => {
     })
 
     let sql = ` 
-    select
-        count(1) as _count,
-        count(1) * 100.0 / sum(count(1)) over() as _percentage,
-        aa.area_aspect_name as _labels
-    from audits a
-    inner join audit_items ai on a.audit_id = ai.audits_audit_id
-    inner join items_areas_aspects iaa on a.item_area_aspect_id = iaa.item_area_aspect_id
-    inner join areas_aspects aa on iaa.area_aspect_id = aa.area_aspect_id
-    inner join customers_units cu on a.unit_id = cu.customer_unit_id
-    inner join customers_groups cg on cu.customer_id = cg.customer_group_id
+        select
+            count(1) as _count,
+            count(1) * 100.0 / sum(count(1)) over() as _percentage,
+            area_aspect_name as _labels
+        from audits a
+        inner join audit_items ai on a.audit_id = ai.audits_audit_id
+        inner join (
+                select item_area_aspect_id,
+                    aa.area_id,
+                    aa.area_aspect_id,
+                    document_item_id,
+                    area_aspect_name
+                from items_areas_aspects iaa
+                inner join areas_aspects aa on iaa.area_aspect_id = aa.area_aspect_id
+            ) as area_aspect on a.item_area_aspect_id = area_aspect.item_area_aspect_id
+        inner join customers_units cu on a.unit_id = cu.customer_unit_id
+        inner join customers_groups cg on cu.customer_id = cg.customer_group_id
     `
 
     for (let i = 0; i < Object.keys(query).length; i ++) {
@@ -190,7 +213,7 @@ exports.getResponsibleByAspect = (req, res, next) => {
         if (i < Object.keys(query).length - 1) sql += ` AND `;           
     }
  
-    sql += ` group by aa.area_aspect_name;`;
+    sql += ` group by area_aspect_name;`;
  
     console.log(sql);
      
