@@ -44,12 +44,12 @@ exports.getPraticalOrderCompliance = (req, res, next) => {
            count(1) as _count,
            count(1) * 100.0 / sum(count(1)) over() as _percentage,
            CASE
-           WHEN ai.audit_conformity = 1 THEN 'A VERIFICAR'
-           WHEN ai.audit_conformity = 2 THEN 'NÃO SE APLICA'
-           WHEN ai.audit_conformity = 3 THEN 'SIM'
-           WHEN ai.audit_conformity = 4 THEN 'NÃO'
-           WHEN ai.audit_conformity = 5 THEN 'FUTURO'
-           WHEN ai.audit_conformity = 6 THEN 'PARCIAL'
+            WHEN ai.audit_conformity = 1 THEN 'A VERIFICAR'
+            WHEN ai.audit_conformity = 2 THEN 'NÃO SE APLICA'
+            WHEN ai.audit_conformity = 3 THEN 'CONFORME'
+            WHEN ai.audit_conformity = 4 THEN 'NÃO CONFORME'
+            WHEN ai.audit_conformity = 5 THEN 'FUTURO'
+            WHEN ai.audit_conformity = 6 THEN 'PARCIAL'
            ELSE 'INVÁLIDO'
        END as _labels
     from audits a
@@ -65,7 +65,7 @@ exports.getPraticalOrderCompliance = (req, res, next) => {
             sql += `${key} = '${query[key]}'`;
         if (i < Object.keys(query).length - 1) sql += ` AND `;           
     }
-
+    sql += ` AND ai.audit_conformity IN (3, 4, 6) `
     sql += ` group by ai.audit_conformity;`;
 
     base.rawquery(sql, req, res, next);
@@ -108,14 +108,14 @@ exports.getResponsibleByConformity = (req, res, next) => {
 
    sql += ` group by uar.unit_aspect_responsible_name;`;
 
-    console.log(sql);
+   // console.log(sql);
     
    base.rawquery(sql, req, res, next);
 
 };
 
 exports.getGeneralCompliance = (req, res, next) => {
-    // - compliance geral (aplicável = SIM e compliance SIM / NAO) (%)
+    req.query.audit_practical_order = '2'; //pratical order = SIM
 
     const query = {};
     Object.keys(req.query).forEach(key => {
@@ -124,7 +124,7 @@ exports.getGeneralCompliance = (req, res, next) => {
         }
     })
 
-    let sql = ` 
+    let sql_old = ` 
     SELECT
                count(1) as _count,
                count(1) * 100.0 / sum(count(1)) over() as _percentage,
@@ -132,7 +132,6 @@ exports.getGeneralCompliance = (req, res, next) => {
         FROM documents d
         INNER JOIN document_items di ON d.document_id = di.document_id
         INNER JOIN items_areas_aspects iaa ON di.document_item_id = iaa.document_item_id
-        INNER JOIN areas_aspects aa ON iaa.area_aspect_id = aa.area_aspect_id
         INNER JOIN document_scopes ds ON d.document_scope_id = ds.document_scope_id
     INNER JOIN (
             SELECT
@@ -158,7 +157,20 @@ exports.getGeneralCompliance = (req, res, next) => {
         (d.document_scope_id = 3 /*ESTADUAL*/ AND d.document_state_id = unit_data.customer_unit_uf_id AND unit_data.area_aspect_id = iaa.area_aspect_id AND unit_data.areas_area_id = iaa.area_id) OR
         ((d.document_scope_id = 1 OR d.document_scope_id = 2)/*FEDERAL ou GLOBAL*/ AND iaa.area_aspect_id = unit_data.area_aspect_id AND unit_data.areas_area_id = iaa.area_id)
     `
-
+    let sql = `
+    select
+        count(1) as _count,
+        count(1) * 100.0 / sum(count(1)) over() as _percentage,
+        uar.unit_aspect_responsible_name as _labels
+    from audits a
+    inner join audit_items ai on a.audit_id = ai.audits_audit_id
+    inner join items_areas_aspects iaa on a.item_area_aspect_id = iaa.item_area_aspect_id
+    inner join responsibles_aspects ra on iaa.area_aspect_id = ra.area_aspect_id
+    inner join units_aspects_responsibles uar on ra.unit_aspect_responsible_id = uar.unit_aspect_responsible_id
+    inner join customers_units cu on a.unit_id = cu.customer_unit_id
+    inner join customers_groups cg on cu.customer_id = cg.customer_group_id 
+    `
+    
     for (let i = 0; i < Object.keys(query).length; i ++) {
         const key = Object.keys(query)[i];
         if (i == 0) sql += ` WHERE `;
@@ -168,7 +180,7 @@ exports.getGeneralCompliance = (req, res, next) => {
  
     sql += ` GROUP BY unit_aspect_responsible_name;`;
  
-    console.log(sql);
+    //console.log(sql);
      
     // req.query.fields = [{ fields: 'document_id', ops: 'eq', values: req.params.id }]
     base.rawquery(sql, req, res, next);
@@ -215,7 +227,7 @@ exports.getResponsibleByAspect = (req, res, next) => {
  
     sql += ` group by area_aspect_name;`;
  
-    console.log(sql);
+    //console.log(sql);
      
     base.rawquery(sql, req, res, next);
 };
