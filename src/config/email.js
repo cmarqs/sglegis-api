@@ -1,16 +1,36 @@
 const Mail = require('nodemailer');
 
 const sender = {
-    user: "talentedexpert0057@gmail.com",
-    pass: 'rjadmstmdsiddl'
+    user: "cleiton.marques@200.systems",
+    pass: 'P@$$m0rd!v7b1k9dm100grilo'
 };
+
+/*.createTransport({
+    host: "my.smtp.host",
+    port: 465,
+    secure: true, // use TLS
+    auth: {
+      user: "username",
+      pass: "pass",
+    },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
+    },
+  });*/
 
 exports.send = (receiver = "", subject = "", message = "") => {
     var transporter = Mail.createTransport({
-        service: 'gmail',
+        host: "smtp.dreamhost.com",
+        port: 465,
+        secure: true, // use TLS
         auth: {
             ...sender
-        }
+        },
+        tls: {
+            // do not fail on invalid certs
+            rejectUnauthorized: false,
+        },
     });
     
     var mailOptions = {

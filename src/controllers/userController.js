@@ -58,7 +58,7 @@ exports.resetPassword = async (req, res, next) => {
 
     try {
         const { user_email } = req.body;
-        //await email.send(user_email, "Your password has been changed", "Your password is " + str_pass);
+        await email.send(user_email, "Sua senha foi alterada", "Por favor, memorize sua nova senha: " + str_pass);
         base.update(users, req, res, next, 'user_id');
     } catch (error) {
         next(error);    
