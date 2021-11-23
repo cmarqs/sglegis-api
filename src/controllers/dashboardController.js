@@ -95,7 +95,7 @@ exports.getResponsibleByConformity = (req, res, next) => {
     inner join items_areas_aspects iaa on a.item_area_aspect_id = iaa.item_area_aspect_id
     inner join responsibles_aspects ra on iaa.area_aspect_id = ra.area_aspect_id
     inner join units_aspects_responsibles uar on ra.unit_aspect_responsible_id = uar.unit_aspect_responsible_id
-    inner join customers_units cu on a.unit_id = cu.customer_unit_id
+    inner join customers_units cu on a.unit_id = cu.customer_unit_id and uar.customer_unit_id = cu.customer_unit_id
     inner join customers_groups cg on cu.customer_id = cg.customer_group_id
    `
 
@@ -167,7 +167,7 @@ exports.getGeneralCompliance = (req, res, next) => {
     inner join items_areas_aspects iaa on a.item_area_aspect_id = iaa.item_area_aspect_id
     inner join responsibles_aspects ra on iaa.area_aspect_id = ra.area_aspect_id
     inner join units_aspects_responsibles uar on ra.unit_aspect_responsible_id = uar.unit_aspect_responsible_id
-    inner join customers_units cu on a.unit_id = cu.customer_unit_id
+    inner join customers_units cu on a.unit_id = cu.customer_unit_id and uar.customer_unit_id = cu.customer_unit_id
     inner join customers_groups cg on cu.customer_id = cg.customer_group_id 
     `
     
