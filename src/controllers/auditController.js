@@ -111,7 +111,7 @@ exports.notifyResponsibles = async (req, res, next) => {
         } else {
             return res.json({
                 success: false,
-                error: "No found responsible related with this item(Aspect). Please check Aspects."
+                error: "Não foi encontrado responsáveis para este aspecto"
             })
         }
     } catch (error) {
@@ -141,6 +141,6 @@ const emailToResponsibles = async (responsibles, auditInfo) =>  {
     });
     message += "\n\n";
     return Promise.all(responsibles.map((responsible) => 
-        email.send(responsible.email, "You received an email for Updated Follow-up", message + `Related Aspects: ${responsible.aspects.join(", ")}`)
+        email.send(responsible.email, "SgLegis: Um aspecto da sua unidade foi atualizado.", message + `Aspectos relacionados: ${responsible.aspects.join(", ")}`)
     ))
 }

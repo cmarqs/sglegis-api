@@ -99,11 +99,11 @@ async function sendEmail(actionPlanId = "", activityChanges = {}) {
             
             if (status == 3) {
                 message += `Os seguintes planos de ação foram removidos: \n\n\n\n`;
-                subject = "An action plan has been removed.";
+                subject = "SgLegis: O plano de ação foi removido.";
             }
             else {
                 message += `Foi feito inclusão de plano de ação sob sua responsabilidade, conforme segue: \n\n\n\n`;
-                subject = "An action plan added to your responsibility.";
+                subject = "SgLegis: Um plano de ação foi adicionado sob sua responsabilidade.";
             }
             
             message += `Número: ${actionPlanId} \n\n`;
@@ -111,7 +111,7 @@ async function sendEmail(actionPlanId = "", activityChanges = {}) {
             message += `Unidade: ${unit_name} \n\n`;
             message += `Assunto: ${aspect_name} \n\n`;
             message += `Atividade: ${activity} \n\n`;
-            message += `Vencimento: ${deadline} \n\n`;
+            message += `Data Limite: ${deadline} \n\n`;
             
             console.log("<============> Sending Email <============>")
             console.log(email, subject, message);
