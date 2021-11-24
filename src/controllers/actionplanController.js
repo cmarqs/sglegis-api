@@ -106,12 +106,14 @@ async function sendEmail(actionPlanId = "", activityChanges = {}) {
                 subject = "SgLegis: Um plano de ação foi adicionado sob sua responsabilidade.";
             }
             
-            message += `Número: ${actionPlanId} \n\n`;
+            message += `Aspecto relacionado: ${aspect_name} \n\n`;
+            message += `Atividade: ${activity} \n\n`;
+            message += `Data Limite: ${deadline} \n\n\n\n`;
+
             message += `Empresa: ${customer_name} \n\n`;
             message += `Unidade: ${unit_name} \n\n`;
-            message += `Assunto: ${aspect_name} \n\n`;
-            message += `Atividade: ${activity} \n\n`;
-            message += `Data Limite: ${deadline} \n\n`;
+            
+            
             
             console.log("<============> Sending Email <============>")
             console.log(email, subject, message);
