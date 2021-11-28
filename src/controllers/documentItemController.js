@@ -47,7 +47,6 @@ exports.get = (req, res, next) => {
 };
 
 exports.getItems = (req, res, next) => {
-    //base.get(document_items, req, res, next, 'document_id');
     let sql = ` SELECT
                     document_item_id,
                     document_item_number,
@@ -62,6 +61,7 @@ exports.getItems = (req, res, next) => {
                 FROM document_items AS document_items
                 INNER JOIN (select d.document_id as id_document, d.document_scope_id from documents d) d on document_items.document_id = d.id_document`
     req.query.fields = [{ fields: 'document_id', ops: 'eq', values: req.params.id }]
+    req.query.orderby = [{ orderby: 'document_item_order', direction: 'asc' }, { orderby: 'document_item_number', direction: 'asc' }, { orderby: 'document_item_description', direction: 'asc' }];
     base.rawquery(sql, req, res, next);
 };
 

@@ -94,6 +94,25 @@ exports.query = (req) => {
     }
 }
 
+function rawOrderBy (req) {
+    if (req.query.orderby != undefined) {
+        let q = ' ORDER BY '
+        //array of orderby
+        if (req.query.orderby.constructor == Array) {
+            for (let i = 0; i < req.query.orderby.length; i++) {
+                const element = req.query.orderby[i];
+                if (i > 0)
+                    q += ', ';
+                q += `${element.orderby} ${element.direction}`;
+            }
+        }
+        else {
+            q += `${o.orderby} ${o.direction}`
+        }
+        return q;
+    }
+}
+
 exports.rawfilter = (req) => {
     if (req.query.fields != undefined) {
         let q = ' WHERE 1 = 1';
@@ -108,6 +127,9 @@ exports.rawfilter = (req) => {
                 }               
             }
         }
+
+        q += rawOrderBy(req);
+
         return q;
     }
 }
