@@ -12,7 +12,6 @@ exports.storage = multer.diskStorage({
       cb(null, DIR);
     },
     filename: (req, file, cb) => {
-      // const fileName = file.originalname.toLowerCase().split(' ').join('-');
       const fileExt = file.originalname.split(".")[file.originalname.split(".").length - 1];
       cb(null, uuidv4() + '.' + fileExt);
     }

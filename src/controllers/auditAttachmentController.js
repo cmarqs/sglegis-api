@@ -17,9 +17,7 @@ exports.getAttachments = (req, res, next) => {
 };
 
 exports.post = (req, res, next) => {
-    // file.setFolder('audits');
-
-    req.body.audit_attachment_src = `${String(req.file.destination)}audits/${req.file.filename}`;
+    req.body.audit_attachment_src = `${req.file.filename}`;
     base.insert(audit_attachments, req, res, next);
 }
 

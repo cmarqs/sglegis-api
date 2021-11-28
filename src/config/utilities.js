@@ -13,5 +13,6 @@ module.exports = (app) => {
     app.use(express.urlencoded({ extended: false }));
     app.use(express.static(path.join(rootPath, 'public')));
 
-    app.use(express.static(path.join(rootPath, 'uploads')));
+    app.use(express.static(path.join(rootPath, 'uploads/documents/')));
+    app.use(express.static(path.join(rootPath, 'uploads/audits/')));
 };
