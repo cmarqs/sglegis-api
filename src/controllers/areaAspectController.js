@@ -5,8 +5,8 @@ const db = require('../models/index');
 const sequelize = require('sequelize');
 
 exports.getAll = (req, res, next) => {
-    //base.getAll(areas_aspects, req, res, next);    
-    //areas_aspects.findAll({include: areas})
+    // base.getAll(areas_aspects, req, res, next);    
+    // areas_aspects.findAll({include: areas})
     let ret = [];
     let sql = `select ap.*, ar.area_name
                 from areas_aspects ap
@@ -19,7 +19,33 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.getQuery = (req, res, next)=>{
-    base.query(areas_aspects, req, res, next);
+    //base.query(areas_aspects, req, res, next);
+    const query = {};
+    Object.keys(req.query).forEach(key => {
+        if (req.query[key] !== "" && req.query[key] != 'null' && req.query[key] != null) {
+            query[key] = req.query[key]
+        }
+    });
+
+    let sql = `select ap.*, ar.area_name
+    from areas_aspects ap
+    join areas ar on (ap.area_id = ar.area_id) `;
+
+
+    for (let i = 0; i < Object.keys(query).length; i ++) {
+        const key = Object.keys(query)[i];
+        if (i == 0) sql += ` WHERE `;
+        if (key.includes('id'))
+            sql += `${key} = '${query[key]}'`;
+        else
+            sql += `${key} LIKE '%${query[key]}%'`;
+        if (i < Object.keys(query).length - 1) sql += ` AND `;           
+    }
+
+    sql += ' order by ap.area_aspect_name;'
+    console.log(sql);
+    
+    base.rawquery(sql, req, res, next);
 }
 
 function checkArea(el, area_id) {
