@@ -14,14 +14,17 @@ exports.send = (receiver = "", subject = "", message = "") => {
     var transporter = Mail.createTransport({
         host: mail.host,
         port: mail.port,
-        secure: true, // use TLS
+        secure: false, // use tls
+        requireTLS: true,
         auth: {
             ...sender
         },
         tls: {
-            // do not fail on invalid certs
+            ciphers: 'SSLv3',
             rejectUnauthorized: false,
         },
+        logger: true,
+        debug: true,
     });
     
     var mailOptions = {
