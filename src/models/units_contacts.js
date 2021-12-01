@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     unit_contact_phone: {
-      type: DataTypes.STRING(25),
+      type: DataTypes.STRING(500),
       allowNull: true
     },
     unit_contact_observation: {

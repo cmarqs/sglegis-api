@@ -42,7 +42,7 @@ exports.getQuery = (req, res, next)=>{
         if (i < Object.keys(query).length - 1) sql += ` AND `;           
     }
 
-    sql += ' order by ap.area_aspect_name;'
+    sql += ' order by ar.area_name, ap.area_aspect_name;'
     console.log(sql);
     
     base.rawquery(sql, req, res, next);

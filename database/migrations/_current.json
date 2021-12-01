@@ -1213,7 +1213,7 @@
                 "unit_contact_phone": {
                     "allowNull": true,
                     "field": "unit_contact_phone",
-                    "seqType": "Sequelize.STRING(25)"
+                    "seqType": "Sequelize.STRING(500)"
                 },
                 "unit_contact_observation": {
                     "allowNull": true,
@@ -1305,5 +1305,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }
