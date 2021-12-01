@@ -7,19 +7,6 @@ const sequelize = require('sequelize');
 exports.getAll = (req, res, next) => {
     // base.getAll(areas_aspects, req, res, next);    
     // areas_aspects.findAll({include: areas})
-    let ret = [];
-    let sql = `select ap.*, ar.area_name
-                from areas_aspects ap
-                join areas ar on (ap.area_id = ar.area_id)
-               order by ap.area_aspect_name `;
-
-    db.sequelize.query(sql, { type: sequelize.QueryTypes.SELECT }).then(values => {
-        res.send(values);
-    });
-}
-
-exports.getQuery = (req, res, next)=>{
-    //base.query(areas_aspects, req, res, next);
     const query = {};
     Object.keys(req.query).forEach(key => {
         if (req.query[key] !== "" && req.query[key] != 'null' && req.query[key] != null) {
@@ -46,6 +33,10 @@ exports.getQuery = (req, res, next)=>{
     console.log(sql);
     
     base.rawquery(sql, req, res, next);
+}
+
+exports.getQuery = (req, res, next)=>{
+    base.query(areas_aspects, req, res, next);
 }
 
 function checkArea(el, area_id) {

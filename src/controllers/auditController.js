@@ -56,6 +56,9 @@ function insert(audits, res, next) {
             return db.audit_items.create(audits.audit_items, { transaction: t }).then(function (new_item) {
                 res.send(new_item);
             });
+        }).catch(err => {
+            console.log(err);
+            next(err);
         });
     });
 }
@@ -69,6 +72,9 @@ function update (audits, res, next) {
             return db.audit_items.create(audits.audit_items, { transaction: t }).then(function (new_item) {
                 res.send(new_item);
             });
+        }).catch(err => {
+            console.log(err);
+            next(err);
         });
     });
 };
