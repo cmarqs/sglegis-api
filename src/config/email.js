@@ -23,12 +23,12 @@ exports.send = (receiver = "", subject = "", message = "") => {
             ciphers: 'SSLv3',
             rejectUnauthorized: false,
         },
-        logger: true,
-        debug: true,
+        logger: false,
+        debug: false,
     });
     
     var mailOptions = {
-        from: sender.user,
+        from: 'sglegis@200.systems',
         to: receiver,
         subject: subject,
         text: message

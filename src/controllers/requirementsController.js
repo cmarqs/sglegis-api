@@ -28,7 +28,8 @@ const getQuery = (req, res, next) => {
             dst.status_description,
             customer_business_name,
             a2.audit_id, a2.audit_item_id, COALESCE(a2.audit_conformity, 1) AS audit_conformity_id, COALESCE(a2.audit_practical_order, 1) AS audit_practical_order_id, a2.audit_control_action, a2.audit_evidnece_compliance, a2.updatedAt as audit_updated_at, a2.user_id as audit_user_id,
-            unit_data.unit_aspect_responsible_name, unit_data.unit_aspect_responsible_email
+            unit_data.unit_aspect_responsible_name, unit_data.unit_aspect_responsible_email,
+            coalesce(qtd_activities, 0) as qtd_activities
         FROM documents d
         INNER JOIN document_items di ON d.document_id = di.document_id
         INNER JOIN items_areas_aspects iaa ON di.document_item_id = iaa.document_item_id
@@ -70,6 +71,14 @@ const getQuery = (req, res, next) => {
                     inner join (select max(ai2.audit_item_id) as audit_item_id, ai2.audits_audit_id from audit_items ai2 group by ai2.audits_audit_id) as ai2 on a.audit_id = ai2.audits_audit_id
                     inner join audit_items ai on ai2.audit_item_id = ai.audit_item_id
         ) as a2 on iaa.item_area_aspect_id = a2.item_area_aspect_id and unit_data.customer_unit_id = a2.unit_id
+        /* ACTION PLAN */
+        LEFT JOIN (
+            select ap.item_area_aspect_id,
+                   count(1) as qtd_activities
+            from actionplans ap
+                     inner join actionplan_items ai on ap.actionplan_id = ai.actionplan_id and ai.status = 0
+            group by item_area_aspect_id
+        ) as action_plan on iaa.item_area_aspect_id = action_plan.item_area_aspect_id
     ) AS req_data
     `;
 
