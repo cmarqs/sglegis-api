@@ -1,20 +1,34 @@
 const Mail = require('nodemailer');
 
 const sender = {
-    user: "talentedexpert0057@gmail.com",
-    pass: 'rjadmstmdsiddl'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
 };
+
+const mail = {
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+}
 
 exports.send = (receiver = "", subject = "", message = "") => {
     var transporter = Mail.createTransport({
-        service: 'gmail',
+        host: mail.host,
+        port: mail.port,
+        secure: false, // use tls
+        requireTLS: true,
         auth: {
             ...sender
-        }
+        },
+        tls: {
+            ciphers: 'SSLv3',
+            rejectUnauthorized: false,
+        },
+        logger: false,
+        debug: false,
     });
     
     var mailOptions = {
-        from: sender.user,
+        from: 'sglegis@200.systems',
         to: receiver,
         subject: subject,
         text: message

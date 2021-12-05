@@ -34,6 +34,17 @@ exports.getQuery = (req, res, next)=>{
     });
 }
 
+function convertData (strData) {
+    if (strData.includes('-'))
+      return strData;
+    if (strData.includes('/'))
+      strData = strData.replaceAll('/', '');
+    let dia = strData.substring(0, 2);
+    let mes = strData.substring(2, 4);
+    let ano = strData.substring(4, 8);
+    const newData = `${ano}-${mes}-${dia}`
+    return newData;
+}
 
 exports.post = (req, res, next) => {
     let actionplans = req.body;
@@ -51,6 +62,7 @@ function insert(actionplans, res) {
             var items = actionplans.actionplan_items;
             items.forEach(i => {
                 i.actionplan_id = new_action_plan.actionplan_id;
+                i.deadline = convertData(i.deadline);
             });
             sendEmail(new_action_plan.actionplan_id, actionplans.activityChanges);
             return db.actionplan_items.bulkCreate(items, { transaction: t }).then(function (new_item) {
@@ -64,6 +76,9 @@ function update (actionplans, res) {
     db.sequelize.transaction(function (t) {
         return db.actionplans.update(actionplans, { transaction: t, where:{actionplan_id: actionplans.actionplan_id} }).then(function (new_action_plan) {
             var items = actionplans.actionplan_items;
+            items.forEach(i => {
+                i.deadline = convertData(i.deadline);
+            });
             sendEmail(actionplans.actionplan_id, actionplans.activityChanges);
             return db.actionplan_items.bulkCreate(items, { transaction: t, updateOnDuplicate: ["updatedAt", "status"] }).then(function (new_item) {
                 res.send(new_action_plan);
@@ -73,7 +88,7 @@ function update (actionplans, res) {
 };
 
 async function sendEmail(actionPlanId = "", activityChanges = {}) {
-    const { customer_name, unity_name, actionplan_items, aspect_name } = activityChanges;
+    const { customer_name, unit_name, actionplan_items, aspect_name } = activityChanges;
     if (!isEmpty(actionplan_items)) {
         actionplan_items.forEach(async (actionPlan) => {
             const { email, activity, deadline, responsible, status } = actionPlan;
@@ -84,19 +99,21 @@ async function sendEmail(actionPlanId = "", activityChanges = {}) {
             
             if (status == 3) {
                 message += `Os seguintes planos de ação foram removidos: \n\n\n\n`;
-                subject = "An action plan has been removed.";
+                subject = "SgLegis: O plano de ação foi removido.";
             }
             else {
                 message += `Foi feito inclusão de plano de ação sob sua responsabilidade, conforme segue: \n\n\n\n`;
-                subject = "An action plan added to your responsibility.";
+                subject = "SgLegis: Um plano de ação foi adicionado sob sua responsabilidade.";
             }
             
-            message += `Número: ${actionPlanId} \n\n`;
-            message += `Empresa: ${customer_name} \n\n`;
-            message += `Unidade: ${unity_name} \n\n`;
-            message += `Assunto: ${aspect_name} \n\n`;
+            message += `Aspecto relacionado: ${aspect_name} \n\n`;
             message += `Atividade: ${activity} \n\n`;
-            message += `Vencimento: ${deadline} \n\n`;
+            message += `Data Limite: ${deadline} \n\n\n\n`;
+
+            message += `Empresa: ${customer_name} \n\n`;
+            message += `Unidade: ${unit_name} \n\n`;
+            
+            
             
             console.log("<============> Sending Email <============>")
             console.log(email, subject, message);

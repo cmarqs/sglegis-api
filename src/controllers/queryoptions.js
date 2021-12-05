@@ -10,10 +10,27 @@ exports.getOptions = (req, key, value) => {
         r.offset = (parseInt(req.query.offset)-1) * parseInt(req.query.limit);
     }
 
-    if (req.query.orderby == undefined || req.query.direction == undefined) {
+    if (req.query.orderby == undefined) {
         r.order = undefined
     } else {
-        r.order = [[req.query.orderby, req.query.direction]];
+        if (req.query.direction == undefined){
+            req.query.direction = "asc";
+        }
+        else {
+            //array of orderby
+            if (req.query.orderby.constructor == Array)
+            {
+                arrOrder = [];
+                req.query.orderby.forEach(o => {
+                    arrOrder.push([o, "asc"]); //TODO: add direction to each orderby
+                });
+                r.order = arrOrder;
+            }
+            else {
+                r.order = [[req.query.orderby, req.query.direction]];
+            }
+        }
+        
     }
 
     if (key != undefined && value != undefined) {
@@ -77,20 +94,42 @@ exports.query = (req) => {
     }
 }
 
+function rawOrderBy (req) {
+    if (req.query.orderby != undefined) {
+        let q = ' ORDER BY '
+        //array of orderby
+        if (req.query.orderby.constructor == Array) {
+            for (let i = 0; i < req.query.orderby.length; i++) {
+                const element = req.query.orderby[i];
+                if (i > 0)
+                    q += ', ';
+                q += `${element.orderby} ${element.direction}`;
+            }
+        }
+        else {
+            q += `${o.orderby} ${o.direction}`
+        }
+        return q;
+    }
+}
+
 exports.rawfilter = (req) => {
     if (req.query.fields != undefined) {
-        let q = 'WHERE 1 = 1';
+        let q = ' WHERE 1 = 1';
         if (Array.isArray(req.query.fields)) {
             for (let x = 0; x < req.query.fields.length; x++){
-                switch (req.query.ops[x]) {
+                switch (req.query.fields[x].ops) {
                     case 'eq':
-                        q += ` AND ${req.query.fields[x]} = '${req.query.values[x]}'`;
+                        q += ` AND ${req.query.fields[x].fields} = '${req.query.fields[x].values}'`;
                         break;
                     case 'like':
                         break;                
                 }               
             }
         }
+
+        q += rawOrderBy(req);
+
         return q;
     }
 }

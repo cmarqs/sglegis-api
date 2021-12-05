@@ -22,15 +22,7 @@ exports.getAll = async (req, res, next) => {
 }
 
 exports.getQuery = async (req, res, next)=>{
-    try {
-        let sql = `SELECT *
-            FROM users u
-            LEFT JOIN customers c ON c.customer_id = u.customer_id`
-        const values = await db.sequelize.query(sql);
-        return res.send(values[0]);
-    } catch (error) {
-        next(error);        
-    }
+    base.query(users, req, res, next);
 }
 
 exports.get = (req, res, next) => {
@@ -44,7 +36,7 @@ exports.post = async (req, res, next) => {
 
     try {
         const { user_email } = req.body;
-        //await email.send(user_email, "You register into Sglegis successfully", "Your password is " + str_pass);
+        await email.send(user_email, "SgLegis: Seu registro no Sglegis foi realizado com sucesso", "Por favor, memorize sua nova senha: " + str_pass);
         base.insert(users, req, res, next);
     } catch (error) {
         next(error);     
@@ -66,7 +58,7 @@ exports.resetPassword = async (req, res, next) => {
 
     try {
         const { user_email } = req.body;
-        //await email.send(user_email, "Your password has been changed", "Your password is " + str_pass);
+        await email.send(user_email, "SgLegis: Sua senha foi alterada", "Por favor, memorize sua nova senha: " + str_pass);
         base.update(users, req, res, next, 'user_id');
     } catch (error) {
         next(error);    
@@ -82,10 +74,10 @@ exports.login = async (req, res, next) => {
         where: { user_email: email }
     });
     if (isEmpty(user)) return res.status(400).json({
-        email: "No user found"
+        email: "Usuário não encontrado"
     });
     if (user.is_disabled === '1') return res.status(400).json({
-        email: "Account is not activated"
+        email: "Conta desabilitada"
     });
 
     if (await verityPassword(password, user.user_password)) {
@@ -105,7 +97,7 @@ exports.login = async (req, res, next) => {
         }
     } else {
         return res.status(400).json({
-            password: "Password incorrect"
+            password: "Senha incorreta"
         });
     }
 }

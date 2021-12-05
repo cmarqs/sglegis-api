@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/documentAttachmentController');
+const controller = require('../controllers/auditAttachmentController');
 const file = require('../middleware/file');
 
-const uploadFolder = 'documents/'
+const uploadFolder = 'audits/'
 file.setFolder(uploadFolder);
 
 router.post('/', file.fileUploader.single('attachment_file'),  controller.post);
