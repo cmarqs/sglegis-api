@@ -4,14 +4,47 @@ const db = require('../models/index');
 const sequelize = require('sequelize');
 
 exports.getAll = (req, res, next) => {
-    db.sequelize.query(`select * 
-    from customers_units u 
-    left join units_contacts c on (u.customer_unit_id = c.unit_contact_customer_unit_id)
-    join customers cs on (cs.customer_id = u.customer_id)
-    join customers_groups cg on (cg.customer_group_id = cs.customer_group_id)    
-    order by u.customer_unit_name asc`).then(values => {
-        res.send(values[0]);
+    const query = {};
+    Object.keys(req.query).forEach(key => {
+        if (req.query[key] !== "" && req.query[key] != 'null' && req.query[key] != null) {
+            query[key] = req.query[key]
+        }
     });
+
+    let sql = `
+    select * from (
+        select
+               c.customer_business_name,
+               u.customer_unit_name,
+               u.customer_unit_address,
+               cc.unit_contact_name,
+               cc.unit_contact_email,
+               cc.unit_contact_phone,
+               cg.customer_group_id,
+               c.customer_id,
+               u.customer_unit_id
+        from customers_units u
+            inner join customers c on u.customer_id = c.customer_id
+            inner join customers_groups cg on c.customer_group_id = cg.customer_group_id
+            left join units_contacts cc on u.customer_unit_id = cc.unit_contact_customer_unit_id
+        ) units 
+    `;
+
+
+    for (let i = 0; i < Object.keys(query).length; i ++) {
+        const key = Object.keys(query)[i];
+        if (i == 0) sql += ` WHERE `;
+        if (key.includes('id'))
+            sql += `${key} = '${query[key]}'`;
+        else
+            sql += `${key} LIKE '%${query[key]}%'`;
+        if (i < Object.keys(query).length - 1) sql += ` AND `;           
+    }
+
+    sql += ' order by customer_unit_name asc;'
+    console.log(sql);
+    
+    base.rawquery(sql, req, res, next);
 }
 
 exports.getQuery = (req, res, next)=>{
