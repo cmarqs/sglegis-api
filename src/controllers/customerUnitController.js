@@ -14,6 +14,10 @@ exports.getAll = (req, res, next) => {
     let sql = `
     select * from (
         select
+            u.customer_unit_cnpj,
+            u.customer_unit_cep,
+            u.customer_unit_uf_id,
+            u.customer_unit_city_id,
                c.customer_business_name,
                u.customer_unit_name,
                u.customer_unit_address,
