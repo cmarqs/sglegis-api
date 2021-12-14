@@ -15,7 +15,8 @@ let sequelize;
 if (env === 'development') {
   sequelize = new Sequelize(config);
 } else {
-  sequelize = new Sequelize(config.uri);
+  sequelize = new Sequelize(config);
+  //sequelize = new Sequelize(config.uri);
 }
 console.log(`Database config loaded is "${env}": ${JSON.stringify(config)}`);
 
