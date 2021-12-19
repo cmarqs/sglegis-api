@@ -19,7 +19,7 @@ const migrationCommands = (transaction) => [
     fn: "addIndex",
     params: [
       "users",
-      ["email"],
+      ["user_email"],
       {
         indexName: "uniq_user_email",
         name: "uniq_user_email",
