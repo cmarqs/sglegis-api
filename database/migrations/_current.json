@@ -1333,11 +1333,25 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": []
+            "indexes": {
+                "44bea0276e4c6b8fa9752925819c73d5772bb4c0": {
+                    "unique": true,
+                    "name": "uniq_user_email",
+                    "fields": [
+                        "email"
+                    ],
+                    "options": {
+                        "indexName": "uniq_user_email",
+                        "name": "uniq_user_email",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         }
     },
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 4
+    "revision": 5
 }

@@ -594,7 +594,25 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": {
+                "672b9f9235c6761791765f08786a42a32972b6cc": {
+                    "unique": true,
+                    "name": "uniq_unit",
+                    "fields": [
+                        "customer_id",
+                        "customer_unit_name",
+                        "customer_unit_city_id",
+                        "customer_unit_uf_id",
+                        "customer_unit_cep"
+                    ],
+                    "options": {
+                        "indexName": "uniq_unit",
+                        "name": "uniq_unit",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "document_attachments": {
             "tableName": "document_attachments",
@@ -1150,7 +1168,23 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": {
+                "1f08a2e991c96f6f1bac7b801d2fc1aa59465e36": {
+                    "unique": true,
+                    "name": "uniq_unit_area_aspect",
+                    "fields": [
+                        "area_id",
+                        "area_aspect_id",
+                        "customer_unit_id"
+                    ],
+                    "options": {
+                        "indexName": "uniq_unit_area_aspect",
+                        "name": "uniq_unit_area_aspect",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "units_aspects_responsibles": {
             "tableName": "units_aspects_responsibles",
@@ -1305,5 +1339,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 3
+    "revision": 4
 }
