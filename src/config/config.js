@@ -1,14 +1,6 @@
-const fs = require('fs');
+require('dotenv').config()
 
 module.exports = {
-    local: {
-        username: 'root',
-        password: '100grilo',
-        database: 'sgLegis',
-        host: 'localhost',
-        port: 3306,
-        dialect: 'mysql',
-    },
     development: {
         username: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASS,
