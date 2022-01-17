@@ -46,7 +46,7 @@ exports.getAll = (req, res, next) => {
     }
 
     sql += ' order by customer_unit_name asc;'
-    console.log(sql);
+    // console.log(sql);
     
     base.rawquery(sql, req, res, next);
 }

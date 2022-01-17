@@ -92,7 +92,7 @@ const getQuery = (req, res, next) => {
             sql += `${key} LIKE '%${query[key]}%'`;
         if (i < Object.keys(query).length - 1) sql += ` AND `;           
     }
-    console.log(sql);
+    // console.log(sql);
     
     base.rawquery(sql, req, res, next);
 }

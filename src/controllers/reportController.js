@@ -2,7 +2,6 @@
 const base = require('./baseController');
 
 exports.getMontlyApplicableReport = (req, res, next) => {
-    const query = {};
 
     var lastday = function (y, m) {
         return new Date(y, m + 1, 0).getDate();
@@ -89,7 +88,5 @@ exports.getMontlyApplicableReport = (req, res, next) => {
     req_data.customer_unit_id = ${customer_unit_id};
     `
 
-    console.log(sql);
-    
     base.rawquery(sql, req, res, next);
 }
