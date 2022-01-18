@@ -7,6 +7,12 @@ module.exports = function (sequelize, DataTypes) {
         createdAt: { type: DataTypes.DATE, allowNull: true },
         updatedAt: { type: DataTypes.DATE, allowNull: true },
     }, {
+        indexes: [{
+            unique: true,
+            name: 'uniq_aspect_by_itemdocument',
+            fields: ['area_id', 'area_aspect_id', 'document_item_id']
+          }]
+    },{
         tableName: 'items_areas_aspects'
     });
     
