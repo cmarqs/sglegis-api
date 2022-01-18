@@ -991,7 +991,23 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": []
+            "indexes": {
+                "aebfd0e1cadcf8c12c9126bb3770a614bee70ac7": {
+                    "unique": true,
+                    "name": "uniq_aspect_by_itemdocument",
+                    "fields": [
+                        "area_id",
+                        "area_aspect_id",
+                        "document_item_id"
+                    ],
+                    "options": {
+                        "indexName": "uniq_aspect_by_itemdocument",
+                        "name": "uniq_aspect_by_itemdocument",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "menus": {
             "tableName": "menus",
@@ -1353,5 +1369,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 5
+    "revision": 6
 }
