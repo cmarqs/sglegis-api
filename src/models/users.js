@@ -1,12 +1,12 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('users', {
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement : true
+      autoIncrement: true
     },
     user_name: {
       type: DataTypes.STRING(50),
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
         model: 'customers',
         key: 'customer_id'
       }
-    },    
+    },
     is_disabled: {
       type: DataTypes.STRING(20),
       allowNull: true,
@@ -49,6 +49,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     }
+  }, {
+    indexes: [{
+      unique: true,
+      name: 'uniq_user_email',
+      fields: ['email']
+    }]
   }, {
     tableName: 'users'
   });

@@ -29,6 +29,13 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         }
     }, {
+        indexes: [{
+            unique: true,
+            name: 'uniq_unit_area_aspect',
+            fields: ['area_id', 'area_aspect_id', 'customer_unit_id']
+        }]  
+    },
+        {
         tableName: 'units_areas_aspects'
     });
 };

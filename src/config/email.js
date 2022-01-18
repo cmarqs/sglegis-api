@@ -16,7 +16,7 @@ exports.send = (receiver = "", subject = "", message = "") => {
         host: mail.host,
         port: mail.port,
         secure: false, // use tls
-        // requireTLS: true,
+        requireTLS: true,
         auth: {
             ...sender
         },
