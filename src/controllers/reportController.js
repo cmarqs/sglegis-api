@@ -16,7 +16,8 @@ exports.getMontlyApplicableReport = (req, res, next) => {
 
     let sql = `
     SELECT DISTINCT
-        area_id,document_scope_id,
+        area_id, area_name, area_aspect_name,
+        document_scope_id,
         document_id, document_type,document_number, document_date, status_description, document_summary
         -- document_item_id, document_item_description
     FROM (
@@ -89,4 +90,5 @@ exports.getMontlyApplicableReport = (req, res, next) => {
     `
 
     base.rawquery(sql, req, res, next);
+
 }
