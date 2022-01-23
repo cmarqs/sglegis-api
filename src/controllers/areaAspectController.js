@@ -30,7 +30,7 @@ exports.getAll = (req, res, next) => {
     }
 
     sql += ' order by ar.area_name, ap.area_aspect_name;'
-    console.log(sql);
+    // console.log(sql);
     
     base.rawquery(sql, req, res, next);
 }
