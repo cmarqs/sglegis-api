@@ -43,7 +43,7 @@ exports.getAll = (req, res, next) => {
     }
 
 
-    console.log(sql);
+    // console.log(sql);
    
     base.rawquery(sql, req, res, next);
     

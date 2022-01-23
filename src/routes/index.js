@@ -25,5 +25,6 @@ router.use(`/${version}/audits/`, require('./auditRoutes'));
 router.use(`/${version}/action-plan/`, require('./actionPlanRoutes'));
 router.use(`/${version}/audit-attachment/`, require('./auditAttachmentRoutes'));
 router.use(`/${version}/dashboard/`, require('./dashboardRouter'));
+router.use(`/${version}/reports/`, require('./reportRouter'));
 
 module.exports = router;

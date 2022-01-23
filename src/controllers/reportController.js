@@ -1,26 +1,29 @@
-const { isEmpty } = require('../utils/functions');
+
 const base = require('./baseController');
 
+exports.getMontlyApplicableReport = (req, res, next) => {
 
-exports.getAll = (req, res, next) => {
-    getQuery(req, res, next);
-}
+    var lastday = function (y, m) {
+        return new Date(y, m + 1, 0).getDate();
+    }
 
-const getQuery = (req, res, next) => {
-    const query = {};
-    Object.keys(req.query).forEach(key => {
-        if (req.query[key] !== "" && req.query[key] != 'null' && req.query[key] != null ) {
-            query[key] = req.query[key]
-        }
-    })
+    const { month, year, customer_unit_id } = req.query;
+    
+    var first_day = 1;
+    var date_from = new Date(`${month}/${first_day}/${year}`);
+    var last_day = lastday(year, date_from.getMonth());
+
 
     let sql = `
-    SELECT
-        *
+    SELECT DISTINCT
+        area_id, area_name, area_aspect_name,
+        document_scope_id,
+        document_id, document_type,document_number, document_date, status_description, document_summary
+        -- document_item_id, document_item_description
     FROM (
         SELECT
             d.document_id, d.document_type, d.document_number, d.document_date, d.document_state_id, d.document_city_id,
-            ds.document_scope_description,
+            ds.document_scope_description, d.document_summary,
             di.document_item_id, di.document_item_number, di.document_item_status_id, di.document_item_description,
             iaa.item_area_aspect_id, iaa.area_id, a.area_name, iaa.area_aspect_id, aa.area_aspect_name, d.document_scope_id,
             unit_data.area_aspect_id AS aspect,
@@ -46,15 +49,15 @@ const getQuery = (req, res, next) => {
             INNER JOIN units_areas_aspects uaa ON cu.customer_unit_id = uaa.customer_unit_id
             INNER JOIN customers cs ON cu.customer_id = cs.customer_id
             LEFT JOIN (
-            	/* RESPONSIBLES PER UNIT AND ASPECTS */
-				 select
-				 	uar.customer_unit_id, 
-				 	ra.area_aspect_id,
-				 	GROUP_CONCAT(uar.unit_aspect_responsible_name SEPARATOR ';') AS unit_aspect_responsible_name,
-				 	GROUP_CONCAT(uar.unit_aspect_responsible_email SEPARATOR ';') AS unit_aspect_responsible_email
-				 from units_aspects_responsibles uar 
-				 inner join responsibles_aspects ra on uar.unit_aspect_responsible_id = ra.unit_aspect_responsible_id
-				 GROUP BY uar.customer_unit_id, ra.area_aspect_id 
+                /* RESPONSIBLES PER UNIT AND ASPECTS */
+                select
+                    uar.customer_unit_id,
+                    ra.area_aspect_id,
+                    GROUP_CONCAT(uar.unit_aspect_responsible_name SEPARATOR ';') AS unit_aspect_responsible_name,
+                    GROUP_CONCAT(uar.unit_aspect_responsible_email SEPARATOR ';') AS unit_aspect_responsible_email
+                from units_aspects_responsibles uar
+                inner join responsibles_aspects ra on uar.unit_aspect_responsible_id = ra.unit_aspect_responsible_id
+                GROUP BY uar.customer_unit_id, ra.area_aspect_id
             ) uar ON uar.customer_unit_id = cu.customer_unit_id and uar.area_aspect_id = uaa.area_aspect_id
         ) unit_data ON
         (d.document_scope_id = 4 /*MUNICIPAL*/ AND d.document_city_id = unit_data.customer_unit_city_id AND unit_data.area_aspect_id = iaa.area_aspect_id AND unit_data.area_id = iaa.area_id) OR
@@ -74,25 +77,18 @@ const getQuery = (req, res, next) => {
         /* ACTION PLAN */
         LEFT JOIN (
             select ap.item_area_aspect_id,
-                   count(1) as qtd_activities
+                count(1) as qtd_activities
             from actionplans ap
-                     inner join actionplan_items ai on ap.actionplan_id = ai.actionplan_id and ai.status = 0
+                    inner join actionplan_items ai on ap.actionplan_id = ai.actionplan_id and ai.status = 0
             group by item_area_aspect_id
         ) as action_plan on iaa.item_area_aspect_id = action_plan.item_area_aspect_id
     ) AS req_data
-    `;
+    where
+    req_data.audit_practical_order_id = 2 and 
+    req_data.document_date between str_to_date('${first_day}/${month}/${year}', '%d/%m/%Y') and str_to_date('${last_day}/${month}/${year}', '%d/%m/%Y') and
+    req_data.customer_unit_id = ${customer_unit_id};
+    `
 
-    
-    for (let i = 0; i < Object.keys(query).length; i ++) {
-        const key = Object.keys(query)[i];
-        if (i == 0) sql += ` WHERE `;
-        if (key.includes('id'))
-            sql += `${key} = '${query[key]}'`;
-        else
-            sql += `${key} LIKE '%${query[key]}%'`;
-        if (i < Object.keys(query).length - 1) sql += ` AND `;           
-    }
-    // console.log(sql);
-    
     base.rawquery(sql, req, res, next);
+
 }
