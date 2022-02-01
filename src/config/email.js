@@ -15,13 +15,13 @@ exports.send = (receiver = "", subject = "", message = "") => {
         // service: "Outlook365",
         host: mail.host,
         port: mail.port,
-        secure: false, // use tls
-        requireTLS: true,
         auth: {
             ...sender
         },
         tls: {
-            ciphers: 'SSLv3',
+            secure: false,
+            ignoreTLS: true,
+            rejectUnauthorized: false
         },
         logger: true,
         debug: true,
