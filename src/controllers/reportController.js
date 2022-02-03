@@ -18,7 +18,7 @@ exports.getMontlyApplicableReport = (req, res, next) => {
     SELECT DISTINCT
         area_id, area_name, area_aspect_name,
         document_scope_id,
-        document_id, document_type,document_number, document_date, status_description, document_summary
+        document_id, document_type,document_number, DATE_FORMAT(document_date, "%d/%m/%Y") as document_date, status_description, document_summary
         -- document_item_id, document_item_description
     FROM (
         SELECT
