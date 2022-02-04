@@ -124,7 +124,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -483,12 +483,28 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": []
+            "indexes": {
+                "1d95eedb9c5f38650d5f6708eb4cab541acb2e8c": {
+                    "unique": true,
+                    "name": "uniq_customer",
+                    "fields": [
+                        "customer_business_name",
+                        "customer_cnpj",
+                        "customer_group_id"
+                    ],
+                    "options": {
+                        "indexName": "uniq_customer",
+                        "name": "uniq_customer",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "customers_groups": {
             "tableName": "customers_groups",
@@ -712,7 +728,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -742,7 +758,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -1369,5 +1385,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 6
+    "revision": 7
 }

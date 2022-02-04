@@ -26,7 +26,15 @@ module.exports = function(sequelize, DataTypes) {
         key: 'customer_group_id'
       },
       comment: 'The group of its customer belongs to'
-    }
+    },
+    createdAt: { type: DataTypes.DATE, allowNull: false },
+    updatedAt: { type: DataTypes.DATE, allowNull: true },
+  }, {
+    indexes: [{
+      unique: true,
+      name: 'uniq_customer',
+      fields: ['customer_business_name', 'customer_cnpj', 'customer_group_id']
+    }]
   }, {
     tableName: 'customers'
   });
