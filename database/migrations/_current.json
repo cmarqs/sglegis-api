@@ -815,7 +815,7 @@
                     "allowNull": true,
                     "comment": "The type of document. Commonly is a law or standard rule (norm).",
                     "field": "document_type",
-                    "seqType": "Sequelize.STRING(500)"
+                    "seqType": "Sequelize.STRING(256)"
                 },
                 "document_number": {
                     "allowNull": true,
@@ -887,17 +887,17 @@
                 }
             },
             "indexes": {
-                "25128cc5259f54c968379f3050e549abc2811a8f": {
+                "a0bea43a1e4f18a5f9d5395431b724488fd5039d": {
                     "unique": true,
                     "name": "uniq_document",
                     "fields": [
                         "document_number",
                         "document_type",
+                        "document_status_id",
                         "document_scope_id",
                         "document_date",
                         "document_state_id",
-                        "document_city_id",
-                        "document_status_id"
+                        "document_city_id"
                     ],
                     "options": {
                         "indexName": "uniq_document",
@@ -1387,5 +1387,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 10
+    "revision": 12
 }

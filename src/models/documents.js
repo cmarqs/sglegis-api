@@ -3,7 +3,7 @@ module.exports = function (sequelize, DataTypes) {
     return sequelize.define('documents', {
         document_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement : true },
         document_scope_id: { type: DataTypes.INTEGER, allowNull: false, comment: "The scope this document can range (global, country, state or city) - (document_scopes model)" },
-        document_type: { type: DataTypes.TEXT, allowNull: true, comment: "The type of document. Commonly is a law or standard rule (norm)." },
+        document_type: { type: DataTypes.STRING(256), allowNull: true, comment: "The type of document. Commonly is a law or standard rule (norm)." },
         document_number: { type: DataTypes.STRING(100), allowNull: true, defaultValue: 'S/N', comment: "A control number of document" },
         document_date: { type: DataTypes.DATE, allowNull: false, comment: "The date that this document was released" },
         document_status_id: { type: DataTypes.INTEGER, allowNull: false, comment: "The state id that this document applies (state model)" },
@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
         indexes: [{
             unique: true,
             name: 'uniq_document',
-            fields: ['document_number', 'document_scope_id', 'document_date', 'document_state_id', 'document_city_id']
+            fields: ['document_number', 'document_type', 'document_status_id', 'document_scope_id', 'document_date', 'document_state_id', 'document_city_id']
           }]
     },{
         tableName: 'documents'
