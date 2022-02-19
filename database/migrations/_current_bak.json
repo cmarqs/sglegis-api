@@ -58,7 +58,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "actionplans": {
             "tableName": "actionplans",
@@ -99,7 +99,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "areas": {
             "tableName": "areas",
@@ -124,12 +124,12 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "areas_aspects": {
             "tableName": "areas_aspects",
@@ -223,12 +223,12 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "audit_items": {
             "tableName": "audit_items",
@@ -291,7 +291,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "audits": {
             "tableName": "audits",
@@ -402,7 +402,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "cities": {
             "tableName": "cities",
@@ -443,7 +443,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "customers": {
             "tableName": "customers",
@@ -483,12 +483,28 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": {
+                "1d95eedb9c5f38650d5f6708eb4cab541acb2e8c": {
+                    "unique": true,
+                    "name": "uniq_customer",
+                    "fields": [
+                        "customer_business_name",
+                        "customer_cnpj",
+                        "customer_group_id"
+                    ],
+                    "options": {
+                        "indexName": "uniq_customer",
+                        "name": "uniq_customer",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "customers_groups": {
             "tableName": "customers_groups",
@@ -517,7 +533,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "customers_units": {
             "tableName": "customers_units",
@@ -652,12 +668,12 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "document_items": {
             "tableName": "document_items",
@@ -712,12 +728,12 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "document_scopes": {
             "tableName": "document_scopes",
@@ -742,12 +758,12 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "document_status": {
             "tableName": "document_status",
@@ -777,7 +793,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "documents": {
             "tableName": "documents",
@@ -871,15 +887,17 @@
                 }
             },
             "indexes": {
-                "6e8d17588d6810ceca4d6f6d1723afd82f91f978": {
+                "25128cc5259f54c968379f3050e549abc2811a8f": {
                     "unique": true,
                     "name": "uniq_document",
                     "fields": [
                         "document_number",
+                        "document_type",
                         "document_scope_id",
                         "document_date",
                         "document_state_id",
-                        "document_city_id"
+                        "document_city_id",
+                        "document_status_id"
                     ],
                     "options": {
                         "indexName": "uniq_document",
@@ -925,7 +943,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "groups_users": {
             "tableName": "groups_users",
@@ -953,7 +971,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "items_areas_aspects": {
             "tableName": "items_areas_aspects",
@@ -1049,7 +1067,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "menus_groups": {
             "tableName": "menus_groups",
@@ -1077,7 +1095,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "responsibles_aspects": {
             "tableName": "responsibles_aspects",
@@ -1110,7 +1128,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "states": {
             "tableName": "states",
@@ -1146,7 +1164,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "units_areas_aspects": {
             "tableName": "units_areas_aspects",
@@ -1238,7 +1256,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "units_contacts": {
             "tableName": "units_contacts",
@@ -1286,7 +1304,7 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": {}
+            "indexes": []
         },
         "users": {
             "tableName": "users",
@@ -1369,5 +1387,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 6
+    "revision": 9
 }

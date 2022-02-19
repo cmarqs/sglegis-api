@@ -223,7 +223,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -668,7 +668,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -815,7 +815,7 @@
                     "allowNull": true,
                     "comment": "The type of document. Commonly is a law or standard rule (norm).",
                     "field": "document_type",
-                    "seqType": "Sequelize.TEXT"
+                    "seqType": "Sequelize.STRING(500)"
                 },
                 "document_number": {
                     "allowNull": true,
@@ -887,15 +887,17 @@
                 }
             },
             "indexes": {
-                "6e8d17588d6810ceca4d6f6d1723afd82f91f978": {
+                "25128cc5259f54c968379f3050e549abc2811a8f": {
                     "unique": true,
                     "name": "uniq_document",
                     "fields": [
                         "document_number",
+                        "document_type",
                         "document_scope_id",
                         "document_date",
                         "document_state_id",
-                        "document_city_id"
+                        "document_city_id",
+                        "document_status_id"
                     ],
                     "options": {
                         "indexName": "uniq_document",
@@ -1385,5 +1387,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 7
+    "revision": 10
 }
