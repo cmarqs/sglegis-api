@@ -69,7 +69,7 @@ exports.delete = (req, res, next) => {
 function convertData (strData) {
 
     addHours = (strData) => {
-       return strData + " 00:00:00"
+       return strData + " 23:59:00"
     }
 
     if (strData.includes('-'))
