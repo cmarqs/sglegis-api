@@ -18,7 +18,7 @@ exports.getMontlyApplicableReport = (req, res, next) => {
     SELECT DISTINCT
         area_id, area_name, area_aspect_name,
         document_scope_id,
-        document_id, document_type,document_number, document_date, status_description, document_summary
+        document_id, document_type,document_number, DATE_FORMAT(document_date, "%d/%m/%Y") as document_date, status_description, document_summary
         -- document_item_id, document_item_description
     FROM (
         SELECT
@@ -32,7 +32,7 @@ exports.getMontlyApplicableReport = (req, res, next) => {
             customer_business_name,
             a2.audit_id, a2.audit_item_id, COALESCE(a2.audit_conformity, 1) AS audit_conformity_id, COALESCE(a2.audit_practical_order, 1) AS audit_practical_order_id, a2.audit_control_action, a2.audit_evidnece_compliance, a2.updatedAt as audit_updated_at, a2.user_id as audit_user_id,
             unit_data.unit_aspect_responsible_name, unit_data.unit_aspect_responsible_email,
-            coalesce(qtd_activities, 0) as qtd_activities
+            coalesce(qtd_activities, 0) as qtd_activities, di.updatedAt
         FROM documents d
         INNER JOIN document_items di ON d.document_id = di.document_id
         INNER JOIN items_areas_aspects iaa ON di.document_item_id = iaa.document_item_id
@@ -85,7 +85,7 @@ exports.getMontlyApplicableReport = (req, res, next) => {
     ) AS req_data
     where
     req_data.audit_practical_order_id = 2 and 
-    req_data.document_date between str_to_date('${first_day}/${month}/${year}', '%d/%m/%Y') and str_to_date('${last_day}/${month}/${year}', '%d/%m/%Y') and
+    req_data.updatedAt between str_to_date('${first_day}/${month}/${year}', '%d/%m/%Y') and str_to_date('${last_day}/${month}/${year}', '%d/%m/%Y') and
     req_data.customer_unit_id = ${customer_unit_id};
     `
 

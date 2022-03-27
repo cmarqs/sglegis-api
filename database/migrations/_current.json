@@ -124,7 +124,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -223,7 +223,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -483,12 +483,28 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": []
+            "indexes": {
+                "1d95eedb9c5f38650d5f6708eb4cab541acb2e8c": {
+                    "unique": true,
+                    "name": "uniq_customer",
+                    "fields": [
+                        "customer_business_name",
+                        "customer_cnpj",
+                        "customer_group_id"
+                    ],
+                    "options": {
+                        "indexName": "uniq_customer",
+                        "name": "uniq_customer",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "customers_groups": {
             "tableName": "customers_groups",
@@ -652,7 +668,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -712,7 +728,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -742,7 +758,7 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -799,7 +815,7 @@
                     "allowNull": true,
                     "comment": "The type of document. Commonly is a law or standard rule (norm).",
                     "field": "document_type",
-                    "seqType": "Sequelize.TEXT"
+                    "seqType": "Sequelize.STRING(256)"
                 },
                 "document_number": {
                     "allowNull": true,
@@ -871,11 +887,13 @@
                 }
             },
             "indexes": {
-                "6e8d17588d6810ceca4d6f6d1723afd82f91f978": {
+                "a0bea43a1e4f18a5f9d5395431b724488fd5039d": {
                     "unique": true,
                     "name": "uniq_document",
                     "fields": [
                         "document_number",
+                        "document_type",
+                        "document_status_id",
                         "document_scope_id",
                         "document_date",
                         "document_state_id",
@@ -1369,5 +1387,5 @@
     "path": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current.json",
     "backupPath": "/Users/cleiton/Work/unity/github/sglegis-api/database/migrations/_current_bak.json",
     "exists": true,
-    "revision": 6
+    "revision": 12
 }

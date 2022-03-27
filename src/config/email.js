@@ -1,6 +1,7 @@
 const Mail = require('nodemailer');
 
 const sender = {
+    type: 'login',
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
 };
@@ -12,23 +13,19 @@ const mail = {
 
 exports.send = (receiver = "", subject = "", message = "") => {
     var transporter = Mail.createTransport({
-        // service: "Outlook365",
+        pool: true,
         host: mail.host,
         port: mail.port,
-        secure: false, // use tls
-        requireTLS: true,
+        secure: false, //use TLS
         auth: {
             ...sender
         },
-        tls: {
-            ciphers: 'SSLv3',
-        },
-        logger: true,
-        debug: true,
+        logger: false,
+        debug: false,
     });
     
     var mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.EMAIL_SENDER,
         to: receiver,
         subject: subject,
         text: message
