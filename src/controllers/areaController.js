@@ -10,7 +10,8 @@ exports.getAll = (req, res, next) => {
         }
     });
 
-    let sql = `inner join (
+    let sql = `select distinct a.* from areas a
+    inner join (
         select uaa.area_id, cu.customer_unit_address, ctm.customer_id, cg.customer_group_id from units_areas_aspects uaa 
         inner join customers_units cu on uaa.customer_unit_id = cu.customer_unit_id 
         inner join customers ctm on cu.customer_id = ctm.customer_id 
