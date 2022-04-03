@@ -2,7 +2,10 @@ const { areas } = require('../models');
 const base = require('./baseController');
 
 exports.getAll = (req, res, next) => {
-    //base.getAll(areas, req, res, next);
+    base.getAll(areas, req, res, next);
+}
+
+exports.getQuery = (req, res, next) => {
     const query = {};
     Object.keys(req.query).forEach(key => {
         if (req.query[key] !== "" && req.query[key] != 'null' && req.query[key] != null) {
@@ -31,7 +34,6 @@ exports.getAll = (req, res, next) => {
 
     sql += ' order by a.area_name;'
     // console.log(sql);
-    
     base.rawquery(sql, req, res, next);
 }
 
