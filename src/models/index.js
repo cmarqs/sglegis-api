@@ -12,7 +12,12 @@ const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
-sequelize = new Sequelize(config);
+if (config.database_url) {
+  sequelize = new Sequelize(config.database_url, config);
+}
+else{
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
 console.log(`Database config loaded is "${env}": ${JSON.stringify(config)}`);
 
 
