@@ -10,7 +10,7 @@ router.get('/detail/:id', controller.get);
 router.get('/query', controller.getQuery);
 router.put('/:id', controller.put);
 router.delete('/:id', controller.delete);
-router.put('/reset-password/:id', controller.resetPassword);
+router.post('/reset-password', controller.reset);
 router.post('/login', controller.login);
 router.get('/current', verifyToken, controller.current);
 

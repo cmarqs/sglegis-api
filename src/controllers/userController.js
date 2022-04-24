@@ -2,7 +2,7 @@ const { users } = require('../models');
 const base = require('./baseController');
 const email = require("../config/email");
 const { generatePassword, getHash, verityPassword, loginJWT } = require('../utils/auth');
-const validateLogin = require('../validations/login');
+const { validateLogin, validateReset } = require('../validations/login');
 const { isEmpty } = require('../utils/functions');
 const { Keys } = require('../config/keys');
 const { customers_groups } = require('../models');
@@ -51,7 +51,36 @@ exports.delete = (req, res, next) => {
     base.delete(users, req, res, next, 'user_id');
 }
 
-exports.resetPassword = async (req, res, next) => {
+exports.reset = async (req, res, next) => {
+    const { errors, isValid } = validateReset(req.body);
+    if (!isValid) return res.status(400).json(errors);
+
+    const { email } = req.body;
+    const user = await users.findOne({
+        where: { user_email: email }
+    });
+    if (isEmpty(user)) return res.status(400).json({
+        email: "Usuário não encontrado"
+    });
+    if (user.is_disabled === '1') return res.status(400).json({
+        email: "Conta desabilitada"
+    });
+
+    req.body = { user_email, user_id } = user;
+    req.params.id = user.user_id;
+
+    resetPassword(req).then(result => {
+        return res.json({
+            success: true
+        });
+    }, (err) => {
+        return res.status(400).json({
+            email: "Login não encontrado"
+        });
+    });
+};
+
+resetPassword = async (req, res, next) => {
     const str_pass = await generatePassword(10);
     const hash_pass = await getHash(str_pass);
     req.body.user_password = hash_pass;    
