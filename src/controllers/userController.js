@@ -87,8 +87,22 @@ resetPassword = async (req, res, next) => {
 
     try {
         const { user_email } = req.body;
-        await email.send(user_email, "SgLegis: Sua senha foi alterada", "Por favor, memorize sua nova senha: " + str_pass);
+
+        const user = await users.findOne({ where: { user_email: user_email } });
+        if (isEmpty(user)) return res.status(400).json({
+            email: "Usuário não encontrado"
+        });
+        if (user.is_disabled === '1') return res.status(400).json({
+            email: "Conta desabilitada"
+        });
+        
+        //update the id 
+        if (!req.params.id)
+            req.params.id = user.dataValues.user_id;
+
         base.update(users, req, res, next, 'user_id');
+        await email.send(user_email, "SgLegis: Sua senha foi alterada", "Por favor, memorize sua nova senha: " + str_pass);
+        
     } catch (error) {
         next(error);    
     }
