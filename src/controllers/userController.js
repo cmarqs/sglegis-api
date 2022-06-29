@@ -80,7 +80,7 @@ exports.reset = async (req, res, next) => {
     });
 };
 
-resetPassword = async (req, res, next) => {
+exports.resetPassword = async (req, res, next) => {
     const str_pass = await generatePassword(10);
     const hash_pass = await getHash(str_pass);
     req.body.user_password = hash_pass;    
